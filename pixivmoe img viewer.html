@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pixivmoe img viewer</title>
+	
+	<style>
+	html,body{
+		height:100%;
+		margin:0;
+		background-color:#dddddd;
+	}
+	.floating-buttons button {
+		margin: 0px;
+		padding: 5px 10px;
+		background-color: #007bff;
+		color: white;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+		font-size: 16px;
+
+	}
+
+	.floating-buttons button:hover {
+		background-color: #2196F3;
+	}
+	.error {
+		color: grey;  /* 错误提示文本为灰色 */
+		font-style: italic;  /* 提示文本为斜体 */
+	}
+	</style>
+</head>
+<body>
+    <!-- 使用 iframe 嵌入另一个网页 -->
+    <iframe src="https://pixivmoe.cocomi.eu.org/illust/127766506" width="100%" height="95%" style="border: 1px solid #ccc;" id="pictureFrame">
+	<!-- <iframe src="" width="100%" height="100%" style="border: 1px solid #ccc;"> -->
+    </iframe>
+	<div class="floating-buttons">
+        <button onclick="pid-=1;jumpPage();">LastPage</button>
+        <button onclick="pid+=1;jumpPage();">NextPage</button>
+		<label for="username" style="height: 100%; margin: 0px;">PID</label>
+		<input type="text" id="pidInput" style="width: 128px; height: 100%; margin: 0px; font-size:16px" value="127766506" />
+    </div>
+	<script>
+		var pid = 127766506;
+
+		function jumpPage(){
+			let frame=document.getElementById('pictureFrame');
+			frame.src=`https://pixivmoe.cocomi.eu.org/illust/${pid}`;
+			let inputElement = document.getElementById("pidInput");
+			inputElement.value = pid;
+		}
+
+		function inputOnClick(){
+			let inputElement = document.getElementById("pidInput");
+			if (isNaN(Number(inputElement.value))){
+				inputElement.value = pid;
+			}
+		}
+		
+		function inputChange() {
+			let inputElement = document.getElementById("pidInput");
+			if (inputElement.value.length <= 9){
+				let tempID = Number(inputElement.value);
+				if (isNaN(tempID)){
+					inputElement.value = "Not a Number";
+				}else{
+					pid = tempID;
+					jumpPage();
+				}
+			}else{
+				inputElement.value="Length Error";
+			}
+		}
+		
+		// 监听 change 事件
+		let inputElement = document.getElementById("pidInput");
+		inputElement.addEventListener("change", inputChange);
+		inputElement.addEventListener("click", inputOnClick);
+	</script>
+</body>
+</html>
