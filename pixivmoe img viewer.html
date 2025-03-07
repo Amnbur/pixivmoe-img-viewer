@@ -27,15 +27,14 @@
 		background-color: #2196F3;
 	}
 	.error {
-		color: grey;  /* 错误提示文本为灰色 */
-		font-style: italic;  /* 提示文本为斜体 */
+		color: grey;
+		font-style: italic;
 	}
 	</style>
 </head>
 <body>
-    <!-- 使用 iframe 嵌入另一个网页 -->
+
     <iframe src="https://pixivmoe.cocomi.eu.org/illust/127766506" width="100%" height="95%" style="border: 1px solid #ccc;" id="pictureFrame">
-	<!-- <iframe src="" width="100%" height="100%" style="border: 1px solid #ccc;"> -->
     </iframe>
 	<div class="floating-buttons">
         <button onclick="pid-=1;jumpPage();">LastPage</button>
@@ -57,25 +56,30 @@
 			let inputElement = document.getElementById("pidInput");
 			if (isNaN(Number(inputElement.value))){
 				inputElement.value = pid;
+				inputElement.classList.remove('error')
 			}
+		}
+		
+		function checkInput(inputText){
+			let TempNumber = parseInt(inputText, 10);
+			if (isNaN(TempNumber))	return "Not a Number";
+			if (TempNumber === Infinity || TempNumber >= 1e9) 	return "Out of Range";
+			return null;
 		}
 		
 		function inputChange() {
 			let inputElement = document.getElementById("pidInput");
-			if (inputElement.value.length <= 9){
-				let tempID = Number(inputElement.value);
-				if (isNaN(tempID)){
-					inputElement.value = "Not a Number";
-				}else{
-					pid = tempID;
-					jumpPage();
-				}
+			let checkInputRes = checkInput(inputElement.value);
+			if (checkInputRes === null){
+				pid = parseInt(inputElement.value,10);
+				jumpPage();
 			}else{
-				inputElement.value="Length Error";
+				inputElement.classList.add('error');
+				inputElement.value = checkInputRes;
 			}
 		}
 		
-		// 监听 change 事件
+		// Event Listeners
 		let inputElement = document.getElementById("pidInput");
 		inputElement.addEventListener("change", inputChange);
 		inputElement.addEventListener("click", inputOnClick);
